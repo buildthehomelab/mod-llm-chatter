@@ -1,5 +1,30 @@
 # Changelog
 
+### Unreleased - Player Glossary
+
+* **Bots talk like players, in the words players use**: normal mode now
+  carries a real vocabulary instead of the seven-term parenthetical it
+  had before. `PLAYER_JARGON` in `chatter_constants.py` buckets everyday
+  WoW shorthand by situation — combat, roles, character and gear, trade,
+  groups, loot, guild, PvP, places, and out-of-game meta — sourced from a
+  community glossary and filtered to WotLK 3.3.5a.
+* **The sample follows the channel**: `pick_jargon_terms()` draws from the
+  buckets that fit where the bot is speaking, weighted toward that
+  channel's own subject matter, so a battleground callout gets flag-carrier
+  shorthand and zone chat gets trade and travel shorthand. A party inside
+  an instance drops the trade and travel vocabulary; raid and battleground
+  chat keep their own mapping, since their register is already tactical.
+* **Deliberately sparse**: `build_jargon_hint()` attaches a six-term sample
+  to roughly 45% of messages and tells the model to use at most one or two
+  where they genuinely fit. Rotation keeps the vocabulary alive across a
+  conversation without handing the model a word list it feels obliged to
+  exhaust.
+* **Roleplay mode is untouched**: the glossary is normal-mode only, pinned
+  by a test. A test also fails the build if later-expansion vocabulary
+  (Mythic+, LFR, transmog, Great Vault) ever lands in the data.
+* **`build_player_chat_guidance(..., jargon=False)`** returns the bare
+  voice contract for callers that need the exact string to be reproducible.
+
 ### 2026-09-18 - Context-Aware Chatter Mode
 
 * **The mode follows the situation, not the server**: `ChatterMode` is now
