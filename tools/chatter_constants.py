@@ -2653,6 +2653,238 @@ LENGTH_HINTS = [
 ]
 
 # =============================================================================
+# PLAYER JARGON (normal mode only)
+# =============================================================================
+# Everyday WoW player vocabulary, bucketed by the situation that makes a
+# term natural. Normal-mode bots speak as people playing the game, so the
+# shorthand a real group uses is part of that voice; roleplay-mode bots
+# never see any of this.
+#
+# WotLK 3.3.5a only. Terms from later expansions (Mythic+ keystones,
+# LFR, transmog, Great Vault, warforging) are deliberately absent -- a
+# bot asking for a key link in Naxxramas breaks immersion harder than
+# plain English would.
+#
+# Each entry is "term (plain meaning)". The meaning is there so the model
+# uses the term correctly; it is not a prompt to expand the abbreviation.
+
+PLAYER_JARGON = {
+    # Pulls, threat, and mechanics -- the shorthand of an active fight.
+    'combat': [
+        "adds (extra enemies joining the fight)",
+        "aggro (an enemy's attention)",
+        "AoE (area-of-effect damage)",
+        "burst (a short window of high damage)",
+        "CC (crowd control)",
+        "CD (cooldown)",
+        "cleave (damage that hits several targets at once)",
+        "crit (critical hit)",
+        "DoT (damage over time)",
+        "HoT (heal over time)",
+        "GCD (global cooldown)",
+        "inc (incoming, enemies on the way)",
+        "interrupt / kick (cutting off an enemy cast)",
+        "kite (keeping an enemy chasing you instead of hitting you)",
+        "LoS (line of sight)",
+        "mob (any hostile creature)",
+        "OOM (out of mana)",
+        "pat (a patrolling enemy)",
+        "pack (a group of trash mobs)",
+        "proc (an effect firing at random)",
+        "pull (starting a fight with a group of enemies)",
+        "body pull / face pull (pulling by walking into range)",
+        "ninja pull (pulling before the group is ready)",
+        "purge / dispel (stripping a buff or debuff)",
+        "rez / battle rez (resurrecting someone)",
+        "rotation (the usual order you press abilities in)",
+        "tag (hitting a mob first to claim it)",
+        "threat / TPS (threat per second)",
+        "trash (non-boss enemies between bosses)",
+        "wipe (the whole group dying)",
+    ],
+    # Roles and who is doing what.
+    'roles': [
+        "DPS (damage dealer, or damage per second)",
+        "healer",
+        "tank",
+        "MT (main tank)",
+        "OT (off-tank)",
+        "HPS (healing per second)",
+        "overhealing (healing that lands on full health)",
+        "caster (a ranged spellcasting character)",
+        "melee (a character who fights in close range)",
+    ],
+    # Characters, specs, and gear talk.
+    'character': [
+        "alt (a secondary character)",
+        "main (your primary character)",
+        "toon (a character)",
+        "spec (talent specialization)",
+        "MS / OS (main spec / off spec)",
+        "respec (paying to redo your talents)",
+        "dual spec (a second saved talent setup)",
+        "build (a chosen talent and gear setup)",
+        "min-max (squeezing out every last bit of performance)",
+        "keybind (an ability bound to a key)",
+        "clicker (someone who clicks abilities instead of binding them)",
+        "twink (a low-level character in high-end gear)",
+        "attunement (a quest chain that unlocks an instance)",
+        "HS (hearthstone, or hearthing home)",
+        "BiS (best in slot)",
+        "GS (GearScore)",
+        "ilvl (item level)",
+        "tier / set bonus (bonuses from wearing matched raid gear)",
+        "resist gear (gear stacked for one damage school)",
+        "hit cap / def cap (the point where more of a stat stops helping)",
+        "gemming / enchanting (adding gems or enchants to gear)",
+    ],
+    # Trade chat, professions, and the auction house.
+    'trade': [
+        "AH (auction house)",
+        "WTB / WTS / WTT (want to buy / sell / trade)",
+        "PST (please send tell, i.e. whisper me)",
+        "OBO (or best offer)",
+        "mats (crafting materials)",
+        "BoE / BoP (bind on equip / bind on pickup)",
+        "DE / shard (disenchanting an item for materials)",
+        "CoD (cash on delivery mail)",
+        "port (a mage portal to a city)",
+        "summ (a warlock summon)",
+        "flask / pot (a flask or potion)",
+        "xmute (an alchemist transmute)",
+        "BS / LW / ench / eng / alch (profession shorthand)",
+    ],
+    # Forming groups and running content.
+    'group': [
+        "LFG / LFM / LF1M (looking for group, more, one more)",
+        "PuG (a pickup group of strangers)",
+        "premade (a group formed ahead of time)",
+        "GTG (good to go)",
+        "comp (the group's mix of classes and roles)",
+        "instance (an isolated copy of a dungeon or raid)",
+        "heroic (the harder version of a dungeon)",
+        "hard mode (an optional harder version of a boss fight)",
+        "clear (finishing all the bosses)",
+        "reset (putting an instance back to the start)",
+        "one more pull (the pull that is never actually the last one)",
+    ],
+    # Loot rules and rolling.
+    'loot': [
+        "need / greed / pass (the three loot roll options)",
+        "roll (rolling a random number for an item)",
+        "MS>OS (main-spec rolls beat off-spec rolls)",
+        "prio (priority on an item)",
+        "SR / soft res (reserving an item before the run)",
+        "master loot (the leader hands out drops)",
+        "FFA (free for all looting)",
+        "RR (round-robin looting)",
+        "ninja (someone who takes loot they had no claim to)",
+        "vendor trash (junk worth only its vendor price)",
+        "DKP / EPGP / loot council (guild loot systems)",
+        "+1 (already won something, so lower priority next roll)",
+    ],
+    # Guilds and the people in them.
+    'guild': [
+        "GM (guild master)",
+        "officer (a guild member with extra permissions)",
+        "raider (a regular on the guild's raid roster)",
+        "social (a guild member who is there for the company)",
+        "tryout (someone being trialed for the raid team)",
+        "bank alt (a character kept around to hold gold and goods)",
+        "gquit (leaving the guild)",
+        "recruiting (looking for new members)",
+        "progression (how far the guild has gotten into a raid)",
+    ],
+    # PvP, battlegrounds, and arenas.
+    'pvp': [
+        "BG (battleground)",
+        "AV / WSG / AB / EotS (the battlegrounds by initials)",
+        "FC (flag carrier)",
+        "EFC (enemy flag carrier)",
+        "inc (incoming enemies at a base)",
+        "defend / def (holding a base or the flag room)",
+        "gank (jumping someone who had no chance)",
+        "camp (killing someone repeatedly at their corpse)",
+        "world PvP (open-world fighting outside a battleground)",
+        "resil (resilience, the PvP survivability stat)",
+        "rating (arena rating)",
+        "premade (a coordinated group queueing together)",
+        "zerg (everyone charging one objective at once)",
+    ],
+    # Places, by the names players actually type.
+    'places': [
+        "SW (Stormwind)",
+        "IF (Ironforge)",
+        "Org (Orgrimmar)",
+        "UC (Undercity)",
+        "TB (Thunder Bluff)",
+        "Darn (Darnassus)",
+        "Dal (Dalaran)",
+        "Shat (Shattrath)",
+        "BB (Booty Bay)",
+        "STV (Stranglethorn Vale)",
+        "EPL / WPL (Eastern / Western Plaguelands)",
+        "Xroads (the Crossroads)",
+        "FP (flight path, or the flight master)",
+        "summ stone (the meeting stone outside an instance)",
+    ],
+    # The out-of-game realities of playing a game.
+    'meta': [
+        "AFK (away from keyboard)",
+        "BRB (be right back)",
+        "bio (a quick break)",
+        "OOC (out of character)",
+        "lag / FPS (connection or framerate trouble)",
+        "DC (disconnected)",
+        "grind (repeating something slow for a reward)",
+        "farm (repeatedly killing or gathering for a specific drop)",
+        "dailies (the quests you redo each day)",
+        "rep (reputation with a faction)",
+        "exalted (the top reputation rank)",
+        "gz / grats (congratulations)",
+        "gg (good game)",
+        "ty / np (thanks / no problem)",
+        "RNG (random chance)",
+        "nerf / buff (something made weaker or stronger by a patch)",
+    ],
+}
+
+# Which jargon buckets fit which channel. A bot in trade-heavy zone chat
+# and a bot mid-pull in a raid draw on different halves of the same
+# vocabulary, and pulling from everything at once produces a bot that
+# talks about auction prices during a boss fight.
+JARGON_CHANNEL_BUCKETS = {
+    'general': ('group', 'trade', 'places', 'character', 'meta'),
+    'guild': ('guild', 'group', 'character', 'loot', 'meta'),
+    'say': ('places', 'character', 'meta', 'combat'),
+    'yell': ('places', 'character', 'meta', 'combat'),
+    'party': ('combat', 'roles', 'group', 'loot'),
+    'raid': ('combat', 'roles', 'loot', 'guild'),
+    'battleground': ('pvp', 'combat', 'roles'),
+}
+
+# Buckets used when a normally social channel is being spoken inside
+# instanced content: drop the trade and travel vocabulary, keep what a
+# group mid-run actually says.
+JARGON_INSTANCED_BUCKETS = ('combat', 'roles', 'loot')
+
+# Channels whose own mapping is already tactical. Raid and battleground
+# chat is a working channel wherever it is spoken, and the battleground
+# mapping in particular carries the PvP vocabulary that the generic
+# instanced buckets do not, so the instance gate must leave it alone.
+JARGON_TACTICAL_CHANNELS = ('raid', 'battleground')
+
+# Fallback for any channel not named above.
+JARGON_DEFAULT_BUCKETS = ('combat', 'roles', 'group', 'meta')
+
+# How many terms to surface in one prompt, and how often to bother. A
+# short rotating sample keeps the vocabulary alive across a conversation
+# without handing the model a word list it feels obliged to exhaust.
+JARGON_SAMPLE_SIZE = 6
+JARGON_HINT_CHANCE = 0.45
+
+
+# =============================================================================
 # ROLEPLAY MODE CONSTANTS (parallel to normal constants above)
 # =============================================================================
 RP_TONES = [

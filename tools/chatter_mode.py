@@ -14,7 +14,17 @@ wherever the channel is known.
 import hashlib
 import random
 
-from chatter_constants import INSTANCE_MAP_IDS, RAID_MAP_IDS
+from chatter_constants import (
+    INSTANCE_MAP_IDS,
+    JARGON_CHANNEL_BUCKETS,
+    JARGON_DEFAULT_BUCKETS,
+    JARGON_HINT_CHANCE,
+    JARGON_INSTANCED_BUCKETS,
+    JARGON_SAMPLE_SIZE,
+    JARGON_TACTICAL_CHANNELS,
+    PLAYER_JARGON,
+    RAID_MAP_IDS,
+)
 
 
 _NORMAL_PLAYER_STYLE_PROFILES = [
@@ -374,12 +384,17 @@ def build_player_chat_guidance(
     mode: str,
     channel: str = 'party',
     instanced: bool = False,
+    jargon: bool = True,
 ) -> str:
     """Return the shared voice contract for playerbot chat prompts.
 
     ``instanced`` marks group content — a dungeon, raid, battleground, or
     arena — where party chat is a working channel rather than a social
     one, and the voice should tighten accordingly.
+
+    ``jargon`` appends a rotating sample of player shorthand, which makes
+    the result non-deterministic. Pass ``False`` for the bare contract
+    when a caller needs to compare or reuse the exact string.
     """
     if is_roleplay(mode):
         return (
@@ -393,7 +408,9 @@ def build_player_chat_guidance(
             "focused on the run. Keep idle chatter short and infrequent "
             "while the group is working through the instance."
         )
-        return _build_normal_guidance(channel_note)
+        return _build_normal_guidance(
+            channel_note, channel, True, jargon
+        )
 
     channel_note = {
         'general': (
@@ -419,12 +436,85 @@ def build_player_chat_guidance(
         channel,
         "Use casual party chat between people playing together.",
     )
-    return _build_normal_guidance(channel_note)
+    return _build_normal_guidance(
+        channel_note,
+        channel,
+        instanced or is_instanced_register(mode),
+        jargon,
+    )
 
 
-def _build_normal_guidance(channel_note: str) -> str:
-    """Return the normal-mode voice contract around a channel note."""
+def pick_jargon_terms(
+    channel: str = 'party',
+    instanced: bool = False,
+    count: int = JARGON_SAMPLE_SIZE,
+) -> list:
+    """Return a small sample of player shorthand that suits the channel.
+
+    Draws from the buckets that match where the bot is speaking, so a
+    battleground callout reaches for flag-carrier shorthand and zone chat
+    reaches for trade and travel shorthand.
+    """
+    key = str(channel or '').strip().lower()
+    if instanced and key not in JARGON_TACTICAL_CHANNELS:
+        buckets = JARGON_INSTANCED_BUCKETS
+    else:
+        buckets = JARGON_CHANNEL_BUCKETS.get(key, JARGON_DEFAULT_BUCKETS)
+
+    count = max(int(count), 0)
+    if not buckets or not count:
+        return []
+
+    # The first bucket is the channel's own subject matter, so half the
+    # sample comes from there. An even draw across every bucket gives a
+    # battleground callout a lecture on auction house shorthand.
+    primary = list(PLAYER_JARGON.get(buckets[0], ()))
+    rest = []
+    for bucket in buckets[1:]:
+        rest.extend(PLAYER_JARGON.get(bucket, ()))
+
+    picked = random.sample(primary, min((count + 1) // 2, len(primary)))
+    remaining = count - len(picked)
+    if remaining > 0:
+        spare = rest or [term for term in primary if term not in picked]
+        picked.extend(random.sample(spare, min(remaining, len(spare))))
+    random.shuffle(picked)
+    return picked
+
+
+def build_jargon_hint(
+    channel: str = 'party',
+    instanced: bool = False,
+    chance: float = JARGON_HINT_CHANCE,
+) -> str:
+    """Return a rotating shorthand sample, or '' when this message skips it.
+
+    The sample is a reminder of how players talk, not a checklist. It is
+    omitted from most messages on purpose: a bot that reaches for jargon
+    in every line reads like a glossary, not a person.
+    """
+    if chance < 1.0 and random.random() >= chance:
+        return ''
+    terms = pick_jargon_terms(channel, instanced)
+    if not terms:
+        return ''
     return (
+        "Shorthand real players use here, for reference only — work in at "
+        "most one or two where they genuinely fit, and skip them entirely "
+        "if plain words read better: "
+        + "; ".join(terms)
+        + "."
+    )
+
+
+def _build_normal_guidance(
+    channel_note: str,
+    channel: str = 'party',
+    instanced: bool = False,
+    jargon: bool = True,
+) -> str:
+    """Return the normal-mode voice contract around a channel note."""
+    guidance = (
         "CHAT MODE: NORMAL. Speak as a person playing WoW, not as an "
         "inhabitant of Azeroth. Race, class, level, gear, deaths, travel, "
         "weather, and locations describe the character or game; never claim "
@@ -441,6 +531,8 @@ def _build_normal_guidance(channel_note: str) -> str:
         "customer-service or motivational-assistant phrasing. Natural "
         "kindness, patience, and complete sentences are welcome."
     )
+    hint = build_jargon_hint(channel, instanced) if jargon else ''
+    return f"{guidance} {hint}" if hint else guidance
 
 
 def build_npc_chat_guidance() -> str:

@@ -305,6 +305,37 @@ The channels are `General`, `Guild`, `Say` (also used for `/yell`),
 `LLMChatter.ChatterMode`", so an existing config behaves exactly as it
 did before. Actual NPCs stay in character in every mode.
 
+### The Player Glossary
+
+Normal-mode bots speak as people playing WoW, and people playing WoW
+talk in shorthand. `PLAYER_JARGON` in
+[`tools/chatter_constants.py`](tools/chatter_constants.py) holds that
+vocabulary — pulls and threat, roles, specs and gear, trade chat,
+loot rules, guild talk, PvP, city abbreviations, and the out-of-game
+realities of lag and AFK breaks — bucketed by the situation that makes
+each term natural.
+
+Each prompt draws a short rotating sample from the buckets that fit the
+channel, so a battleground callout reaches for `FC` and `inc` while zone
+chat reaches for `WTS`, `PST`, and `SW`. The sample is a reference, not
+a checklist: it is attached to fewer than half of messages on purpose,
+and the prompt tells the model to work in at most one or two terms and
+skip them entirely when plain words read better. A bot that reaches for
+jargon in every line reads like a glossary, not a person.
+
+Two boundaries are deliberate:
+
+* **Roleplay mode never sees any of it.** A character living in Azeroth
+  has no word for "off-spec".
+* **WotLK 3.3.5a only.** Later-expansion vocabulary — Mythic+ keystones,
+  LFR, transmog, the Great Vault — is absent and covered by a test. A bot
+  asking for a key link in Naxxramas breaks immersion harder than plain
+  English would.
+
+To add terms, drop them into the right bucket as `"term (plain
+meaning)"`. The meaning is there so the model uses the term correctly;
+it is not an instruction to spell the abbreviation out.
+
 ### Known Limitations
 - **Ollama / open-source models**: Local inference needs fast hardware and
   strong instruction following. Small or reasoning-heavy models can be slow,

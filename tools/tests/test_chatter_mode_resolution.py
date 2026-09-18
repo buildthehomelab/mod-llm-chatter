@@ -14,6 +14,7 @@ MODULE_DIR = TOOLS_DIR.parent
 if str(TOOLS_DIR) not in sys.path:
     sys.path.insert(0, str(TOOLS_DIR))
 
+from chatter_constants import PLAYER_JARGON  # noqa: E402
 from chatter_mode import (  # noqa: E402
     CHANNEL_MODE_KEYS,
     GROUP_TASK_CHANNELS,
@@ -24,6 +25,7 @@ from chatter_mode import (  # noqa: E402
     is_raid_map,
     is_roleplay,
     normalize_chatter_mode,
+    pick_jargon_terms,
     resolve_chatter_mode,
 )
 
@@ -170,8 +172,8 @@ def test_instanced_mode_reads_as_a_player_voice_everywhere():
 
 
 def test_instanced_party_chat_uses_the_working_register():
-    social = build_player_chat_guidance('normal', 'party')
-    working = build_player_chat_guidance('instanced', 'party')
+    social = build_player_chat_guidance('normal', 'party', jargon=False)
+    working = build_player_chat_guidance('instanced', 'party', jargon=False)
 
     assert 'CHAT MODE: NORMAL' in social
     assert 'CHAT MODE: NORMAL' in working
@@ -181,10 +183,90 @@ def test_instanced_party_chat_uses_the_working_register():
     assert 'Keep idle chatter short' in working
 
     # The explicit flag is equivalent, for callers that resolved the mode
-    # before they knew where the group was.
+    # before they knew where the group was. Compared without the jargon
+    # sample, which is deliberately random per message.
     assert build_player_chat_guidance(
-        'normal', 'party', instanced=True
+        'normal', 'party', instanced=True, jargon=False
     ) == working
+
+
+def test_roleplay_never_sees_player_jargon():
+    for channel in ('party', 'raid', 'battleground', 'general', 'guild'):
+        for instanced in (False, True):
+            guidance = build_player_chat_guidance(
+                'roleplay', channel, instanced
+            )
+            assert 'Shorthand real players use' not in guidance
+            assert 'CHAT MODE: ROLEPLAY' in guidance
+
+
+def test_jargon_hint_is_optional_and_bounded():
+    # Off by request: the bare contract stays reproducible.
+    bare = build_player_chat_guidance('normal', 'party', jargon=False)
+    assert 'Shorthand real players use' not in bare
+    assert all(
+        build_player_chat_guidance('normal', 'party', jargon=False) == bare
+        for _ in range(20)
+    )
+
+    # On, it appends to that same contract rather than replacing it.
+    seen = {
+        build_player_chat_guidance('normal', 'party')
+        for _ in range(60)
+    }
+    assert any('Shorthand real players use' in text for text in seen)
+    assert all(text.startswith(bare) for text in seen)
+    # Rotating, not a fixed line.
+    assert len(seen) > 1
+
+
+def test_jargon_buckets_follow_the_channel():
+    # A battleground is instanced content, but its chat is already
+    # tactical, so it keeps the PvP vocabulary instead of falling back to
+    # the generic dungeon buckets.
+    bg_terms = set()
+    for _ in range(60):
+        bg_terms.update(pick_jargon_terms('battleground', instanced=True))
+    assert any(term.startswith('FC ') for term in bg_terms)
+    assert any(term.startswith('EFC ') for term in bg_terms)
+
+    # Zone chat reaches for trade and travel shorthand.
+    general_terms = set()
+    for _ in range(60):
+        general_terms.update(pick_jargon_terms('general'))
+    assert any(term.startswith('AH ') for term in general_terms)
+
+    # A party inside an instance drops the trade and travel vocabulary.
+    instanced_terms = set()
+    for _ in range(60):
+        instanced_terms.update(pick_jargon_terms('party', instanced=True))
+    assert not any(term.startswith('AH ') for term in instanced_terms)
+    assert not any(term.startswith('SW ') for term in instanced_terms)
+
+
+def test_jargon_sample_is_sized_and_unique():
+    for count in (0, 1, 4, 6, 999):
+        terms = pick_jargon_terms('party', count=count)
+        assert len(terms) == len(set(terms))
+        assert len(terms) <= max(count, 0)
+    assert pick_jargon_terms('party', count=6) != []
+    # An unmapped channel still produces something usable.
+    assert pick_jargon_terms('nonexistent-channel')
+
+
+def test_jargon_stays_in_the_supported_expansion():
+    # WotLK 3.3.5a. Later-expansion vocabulary would read as a bot
+    # talking about a game nobody at the table is playing.
+    banned = (
+        'mythic', 'keystone', 'transmog', 'xmog', 'lfr', 'great vault',
+        'warforg', 'titanforg', 'covenant', 'torghast', 'delve',
+        'islands', 'azerite', 'artifact power', 'garrison',
+    )
+    for bucket, terms in PLAYER_JARGON.items():
+        for term in terms:
+            lowered = term.casefold()
+            for word in banned:
+                assert word not in lowered, f'{bucket}: {term}'
 
 
 def test_raid_and_bg_keep_their_own_channel_notes():
