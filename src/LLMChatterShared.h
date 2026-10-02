@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 
+class Channel;
 class Creature;
 class Group;
 class Map;
@@ -24,6 +25,9 @@ enum class LLMChatterPriorityBand : uint8
 };
 
 bool IsPlayerBot(Player* player);
+// Whether the player has joined a channel with the same
+// channel ID (the old playerbots Player::IsInChannel).
+bool IsPlayerInChannel(Player* player, Channel const* channel);
 std::string const& GetCreatureEntryColumn();
 Creature* FindCreatureBySpawnId(Map* map, uint32 spawnId);
 void LoadNamedBossCache();

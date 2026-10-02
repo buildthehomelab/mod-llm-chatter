@@ -33,8 +33,10 @@
 #include <map>
 #include <random>
 #include <sstream>
+#include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 
 std::string const& GetCreatureEntryColumn()
@@ -1057,13 +1059,108 @@ uint32 LookupTextEmoteId(const std::string& emoteName)
 }
 }
 
+namespace
+{
+// Bot sessions have no socket. Current cores mark them
+// with WorldSession::IsHeadless(); older playerbots core
+// forks have WorldSession::IsBot() instead. Looking for
+// both at compile time lets the module build on either.
+template <typename Session, typename = void>
+struct HasIsHeadless : std::false_type
+{
+};
+
+template <typename Session>
+struct HasIsHeadless<Session,
+    std::void_t<decltype(
+        std::declval<Session&>().IsHeadless())>>
+    : std::true_type
+{
+};
+
+template <typename Session, typename = void>
+struct HasIsBot : std::false_type
+{
+};
+
+template <typename Session>
+struct HasIsBot<Session,
+    std::void_t<decltype(
+        std::declval<Session&>().IsBot())>>
+    : std::true_type
+{
+};
+
+template <typename Session>
+bool IsBotSession(Session* session)
+{
+    if constexpr (HasIsHeadless<Session>::value)
+        return session->IsHeadless();
+    else if constexpr (HasIsBot<Session>::value)
+        return session->IsBot();
+    else
+        return false;
+}
+
+// Older playerbots core forks add Player::IsInChannel();
+// the current core dropped it. Without it, read the
+// player's joined channel list, which is protected, so
+// a derived class has to name it.
+template <typename P, typename = void>
+struct HasIsInChannel : std::false_type
+{
+};
+
+template <typename P>
+struct HasIsInChannel<P,
+    std::void_t<decltype(std::declval<P&>().IsInChannel(
+        std::declval<Channel const*>()))>>
+    : std::true_type
+{
+};
+
+struct JoinedChannelsAccess : Player
+{
+    static auto const& Get(Player const* player)
+    {
+        return player->*(&JoinedChannelsAccess::m_channels);
+    }
+};
+
+template <typename P>
+bool IsInChannelCompat(P* player, Channel const* channel)
+{
+    if constexpr (HasIsInChannel<P>::value)
+        return player->IsInChannel(channel);
+    else
+    {
+        for (Channel const* joined :
+             JoinedChannelsAccess::Get(player))
+        {
+            if (joined && joined->GetChannelId()
+                    == channel->GetChannelId())
+                return true;
+        }
+        return false;
+    }
+}
+} // namespace
+
+bool IsPlayerInChannel(Player* player, Channel const* channel)
+{
+    if (!player || !channel)
+        return false;
+
+    return IsInChannelCompat(player, channel);
+}
+
 bool IsPlayerBot(Player* player)
 {
     if (!player)
         return false;
 
     WorldSession* session = player->GetSession();
-    if (session && session->IsBot())
+    if (session && IsBotSession(session))
         return true;
 
     PlayerbotAI* ai = GET_PLAYERBOT_AI(player);
@@ -1072,7 +1169,7 @@ bool IsPlayerBot(Player* player)
 
     // During playerbot login, the synthetic bot
     // WorldSession exists before PlayerbotAI master
-    // state is always available. Session::IsBot()
+    // state is always available. The session check
     // handles that timing window. A user-controlled
     // self-bot uses a real client session and sets
     // master == bot, so IsSelfBot() keeps it in
@@ -1559,7 +1656,7 @@ bool CanSpeakInGeneralChannel(Player* bot)
             == std::string::npos)
             continue;
 
-        return bot->IsInChannel(channel);
+        return IsPlayerInChannel(bot, channel);
     }
 
     return false;
