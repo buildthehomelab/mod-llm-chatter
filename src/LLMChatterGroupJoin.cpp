@@ -306,7 +306,6 @@ void EnsureGroupJoinQueued(
     Player* realPlayer = nullptr;
     uint32 realPlayerGuid = 0;
     uint32 realPlayerZone = 0;
-    uint32 realPlayerMap = 0;
     std::vector<GroupJoinEntry> botEntries;
 
     if (Player* leader = ObjectAccessor::FindPlayer(
@@ -319,7 +318,6 @@ void EnsureGroupJoinQueued(
                 leader->GetGUID().GetCounter();
             playerName = leader->GetName();
             realPlayerZone = leader->GetZoneId();
-            realPlayerMap = leader->GetMapId();
         }
     }
 
@@ -341,8 +339,6 @@ void EnsureGroupJoinQueued(
                 playerName = member->GetName();
                 realPlayerZone =
                     member->GetZoneId();
-                realPlayerMap =
-                    member->GetMapId();
             }
             continue;
         }
@@ -409,8 +405,6 @@ void EnsureGroupJoinQueued(
     batch.mapId = batchMapId;
     batch.lastJoinTime = 0;
     batch.bots = std::move(botEntries);
-
-    size_t botCount = batch.bots.size();
 
     {
         std::lock_guard<std::mutex> guard(
