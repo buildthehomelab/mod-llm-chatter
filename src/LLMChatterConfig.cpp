@@ -350,6 +350,12 @@ void LLMChatterConfig::LoadConfig()
         {
             if (minValue > maxValue)
             {
+                LOG_WARN(
+                    "module",
+                    "LLMChatter: {}Min ({}) is above "
+                    "{}Max ({}), using {}",
+                    rangeName, minValue, rangeName,
+                    maxValue, maxValue);
                 minValue = maxValue;
             }
         };
