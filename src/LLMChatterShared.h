@@ -47,7 +47,7 @@ std::string NormalizeChatTextForDb(
     const std::string& str, size_t maxChars = 0);
 
 std::string EscapeString(const std::string& str);
-std::string JsonEscape(const std::string& str);
+std::string LLMChatterJsonEscape(const std::string& str);
 std::string GetCreatureRoleName(Creature* creature);
 std::string GetChatterClassName(uint8 classId);
 std::string GetRaceName(uint8 raceId);

@@ -122,7 +122,7 @@ void QueueBotGreetingEvent(
             "\"bot_guid\":" +
                 std::to_string(botGuid) + ","
             "\"bot_name\":\"" +
-                JsonEscape(botName) + "\","
+                LLMChatterJsonEscape(botName) + "\","
             "\"bot_class\":" +
                 std::to_string(botClass) + ","
             "\"bot_race\":" +
@@ -135,7 +135,7 @@ void QueueBotGreetingEvent(
             "\"group_id\":" +
                 std::to_string(groupId) + ","
             "\"player_name\":\"" +
-                JsonEscape(playerName) + "\","
+                LLMChatterJsonEscape(playerName) + "\","
             "\"player_guid\":" +
                 std::to_string(playerGuid) + ","
             "\"group_size\":" +
@@ -522,7 +522,7 @@ void FlushGroupJoinBatches()
                 "\"bot_guid\":" +
                     std::to_string(e.botGuid) + ","
                 "\"bot_name\":\"" +
-                    JsonEscape(e.botName) + "\","
+                    LLMChatterJsonEscape(e.botName) + "\","
                 "\"bot_class\":" +
                     std::to_string(e.botClass) + ","
                 "\"bot_race\":" +
@@ -535,7 +535,7 @@ void FlushGroupJoinBatches()
                 "\"group_id\":" +
                     std::to_string(b.groupId) + ","
                 "\"player_name\":\"" +
-                    JsonEscape(b.playerName) + "\","
+                    LLMChatterJsonEscape(b.playerName) + "\","
                 "\"player_guid\":" +
                     std::to_string(b.playerGuid) + ","
                 "\"group_size\":0,"
@@ -576,7 +576,7 @@ void FlushGroupJoinBatches()
                         std::to_string(
                             e.botGuid) + ","
                     "\"bot_name\":\"" +
-                        JsonEscape(e.botName)
+                        LLMChatterJsonEscape(e.botName)
                         + "\","
                     "\"bot_class\":" +
                         std::to_string(
@@ -610,7 +610,7 @@ void FlushGroupJoinBatches()
                 "\"group_id\":" +
                     std::to_string(b.groupId) + ","
                 "\"player_name\":\"" +
-                    JsonEscape(b.playerName)
+                    LLMChatterJsonEscape(b.playerName)
                     + "\","
                 "\"player_guid\":" +
                     std::to_string(b.playerGuid) + ","

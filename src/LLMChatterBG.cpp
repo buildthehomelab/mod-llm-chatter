@@ -142,9 +142,9 @@ void AppendBGContext(
                 continue;
             if (!first) json += ",";
             json += "{\"name\":\""
-                + JsonEscape(rp->GetName())
+                + LLMChatterJsonEscape(rp->GetName())
                 + "\",\"race\":\""
-                + JsonEscape(
+                + LLMChatterJsonEscape(
                     GetRaceName(rp->getRace()))
                 + "\"}";
             first = false;
@@ -173,7 +173,7 @@ void AppendBGContext(
             {
                 json += ","
                     "\"friendly_flag_carrier\":\""
-                    + JsonEscape(
+                    + LLMChatterJsonEscape(
                         carrier->GetName())
                     + "\"";
             }
@@ -191,7 +191,7 @@ void AppendBGContext(
             {
                 json += ","
                     "\"enemy_flag_carrier\":\""
-                    + JsonEscape(
+                    + LLMChatterJsonEscape(
                         eCarrier->GetName())
                     + "\"";
             }
@@ -292,7 +292,7 @@ static void DetectScoreEvents(
                 {
                     capJson +=
                         ",\"scorer_name\":"
-                        "\"" + JsonEscape(
+                        "\"" + LLMChatterJsonEscape(
                             sp->GetName())
                         + "\","
                         "\"scorer_is_real_"
@@ -328,7 +328,7 @@ static void DetectScoreEvents(
                 {
                     capJson +=
                         ",\"scorer_name\":"
-                        "\"" + JsonEscape(
+                        "\"" + LLMChatterJsonEscape(
                             sp->GetName())
                         + "\","
                         "\"scorer_is_real_"
@@ -437,7 +437,7 @@ static void PollWSGState(
             {
                 pickJson +=
                     ",\"carrier_name\":\""
-                    + JsonEscape(
+                    + LLMChatterJsonEscape(
                         cp->GetName())
                     + "\","
                     "\"carrier_is_real_"
@@ -481,7 +481,7 @@ static void PollWSGState(
             {
                 dropJson +=
                     ",\"dropper_name\":\""
-                    + JsonEscape(
+                    + LLMChatterJsonEscape(
                         dp->GetName())
                     + "\","
                     "\"dropper_is_real_"
@@ -524,7 +524,7 @@ static void PollWSGState(
             {
                 pickJson +=
                     ",\"carrier_name\":\""
-                    + JsonEscape(
+                    + LLMChatterJsonEscape(
                         cp->GetName())
                     + "\","
                     "\"carrier_is_real_"
@@ -568,7 +568,7 @@ static void PollWSGState(
             {
                 dropJson +=
                     ",\"dropper_name\":\""
-                    + JsonEscape(
+                    + LLMChatterJsonEscape(
                         dp->GetName())
                     + "\","
                     "\"dropper_is_real_"
@@ -681,7 +681,7 @@ static void PollABState(
                 {
                     nodeJson +=
                         ",\"claimer_name\":\""
-                        + JsonEscape(
+                        + LLMChatterJsonEscape(
                             claimer->GetName())
                         + "\","
                         "\"claimer_is_real_"
@@ -780,7 +780,7 @@ static void PollEYState(
             {
                 nodeJson +=
                     ",\"claimer_name\":\""
-                    + JsonEscape(
+                    + LLMChatterJsonEscape(
                         claimer->GetName())
                     + "\","
                     "\"claimer_is_real_"
@@ -1064,7 +1064,7 @@ public:
                         std::to_string(groupId) +
                     ","
                     "\"player_name\":\"" +
-                        JsonEscape(
+                        LLMChatterJsonEscape(
                             arrPlayer->GetName()) +
                     "\","
                     "\"zone\":" +
@@ -1214,7 +1214,7 @@ public:
                                 - 1)];
                     std::string extra =
                         "{\"player_name\":\""
-                        + JsonEscape(
+                        + LLMChatterJsonEscape(
                             chosen->GetName())
                         + "\"}";
                     AppendBGContext(
@@ -1323,7 +1323,7 @@ public:
             "{\"flag_team\":\"" + flagTeam +
             "\","
             "\"returner_name\":\"" +
-            JsonEscape(player->GetName()) +
+            LLMChatterJsonEscape(player->GetName()) +
             "\","
             "\"returner_is_real_player\":"
             + std::string(

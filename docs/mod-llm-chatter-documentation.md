@@ -268,7 +268,7 @@ The shared timing logic now uses table-driven priority and reaction-delay
 registries instead of a single long conditional block.
 
 - `EscapeString()`
-- `JsonEscape()`
+- `LLMChatterJsonEscape()`
 - `GetZoneName()`
 - `GetChatterClassName()`
 - `GetRaceName()`

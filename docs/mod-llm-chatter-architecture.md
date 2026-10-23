@@ -705,7 +705,7 @@ This asymmetry is known and acceptable in the shipped source state.
 `LLMChatterShared.cpp` owns cross-domain helpers such as:
 
 - `EscapeString()`
-- `JsonEscape()`
+- `LLMChatterJsonEscape()`
 - `GetZoneName()`
 - `GetChatterClassName()`
 - `GetRaceName()`

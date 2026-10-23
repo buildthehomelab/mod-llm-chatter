@@ -361,7 +361,7 @@ void HandleEmoteAtGroupBot(
                 "{\"bot_guid\":"
                 + std::to_string(botGuid)
                 + ",\"bot_name\":\""
-                + JsonEscape(
+                + LLMChatterJsonEscape(
                       targetBot->GetName())
                 + "\",\"bot_class\":"
                 + std::to_string(
@@ -376,9 +376,9 @@ void HandleEmoteAtGroupBot(
                 + std::to_string(
                       targetBot->GetLevel())
                 + ",\"emote_name\":\""
-                + JsonEscape(emoteName)
+                + LLMChatterJsonEscape(emoteName)
                 + "\",\"player_name\":\""
-                + JsonEscape(player->GetName())
+                + LLMChatterJsonEscape(player->GetName())
                 + "\",\"directed\":true"
                 + ",\"custom_emote\":"
                 + (isCustom ? "1" : "0")
@@ -529,7 +529,7 @@ void HandleEmoteObserver(
         + std::to_string(
             reactor->GetGUID().GetCounter())
         + ",\"bot_name\":\""
-        + JsonEscape(reactor->GetName())
+        + LLMChatterJsonEscape(reactor->GetName())
         + "\",\"bot_class\":"
         + std::to_string(reactor->getClass())
         + ",\"bot_race\":"
@@ -539,19 +539,19 @@ void HandleEmoteObserver(
         + ",\"bot_level\":"
         + std::to_string(reactor->GetLevel())
         + ",\"emote_name\":\""
-        + JsonEscape(emoteName)
+        + LLMChatterJsonEscape(emoteName)
         + "\",\"player_name\":\""
-        + JsonEscape(player->GetName())
+        + LLMChatterJsonEscape(player->GetName())
         + "\",\"target_type\":\""
         + tgtTypeStr
         + "\",\"target_name\":\""
-        + JsonEscape(targetName)
+        + LLMChatterJsonEscape(targetName)
         + "\",\"npc_rank\":"
         + std::to_string(npcRank)
         + ",\"npc_type\":"
         + std::to_string(npcType)
         + ",\"npc_subname\":\""
-        + JsonEscape(npcSubName)
+        + LLMChatterJsonEscape(npcSubName)
         + "\",\"custom_emote\":"
         + (isCustom ? "1" : "0")
         + ",\"group_id\":"

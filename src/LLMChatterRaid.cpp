@@ -679,7 +679,7 @@ public:
             // Build JSON extra_data
             std::string json = "{";
             json += "\"boss_name\":\""
-                + JsonEscape(boss.bossName)
+                + LLMChatterJsonEscape(boss.bossName)
                 + "\",";
             json += "\"boss_index\":"
                 + std::to_string(id) + ",";
@@ -687,12 +687,12 @@ public:
                 + std::to_string(
                     boss.creatureEntry) + ",";
             json += "\"raid_name\":\""
-                + JsonEscape(boss.raidName)
+                + LLMChatterJsonEscape(boss.raidName)
                 + "\",";
             if (boss.wing[0] != '\0')
             {
                 json += "\"wing\":\""
-                    + JsonEscape(boss.wing)
+                    + LLMChatterJsonEscape(boss.wing)
                     + "\",";
             }
             json += "\"difficulty\":\""
@@ -703,7 +703,7 @@ public:
                 + std::to_string(groupCounter)
                 + ",";
             json += "\"player_name\":\""
-                + JsonEscape(player->GetName())
+                + LLMChatterJsonEscape(player->GetName())
                 + "\",";
             json += "\"zone_id\":"
                 + std::to_string(
