@@ -1031,15 +1031,15 @@ std::string BuildBotParticipantJson(Player* bot)
 {
     return std::string("{")
         + "\"name\":\""
-        + JsonEscape(bot->GetName()) + "\","
+        + LLMChatterJsonEscape(bot->GetName()) + "\","
         + "\"is_npc\":false,"
         + "\"bot_guid\":"
         + std::to_string(
             bot->GetGUID().GetCounter())
         + ",\"class\":\""
-        + JsonEscape(GetChatterClassName(bot->getClass()))
+        + LLMChatterJsonEscape(GetChatterClassName(bot->getClass()))
         + "\",\"race\":\""
-        + JsonEscape(GetRaceName(bot->getRace()))
+        + LLMChatterJsonEscape(GetRaceName(bot->getRace()))
         + "\",\"role\":\"bot\"}";
 }
 
@@ -1055,30 +1055,30 @@ std::string BuildNPCParticipantJson(
         gender = "female";
     return std::string("{")
         + "\"name\":\""
-        + JsonEscape(cr->GetName()) + "\","
+        + LLMChatterJsonEscape(cr->GetName()) + "\","
         + "\"is_npc\":true,"
         + "\"npc_entry\":"
         + std::to_string(cr->GetEntry())
         + ",\"npc_spawn_id\":"
         + std::to_string(cr->GetSpawnId())
         + ",\"role\":\""
-        + JsonEscape(GetCreatureRoleName(cr))
+        + LLMChatterJsonEscape(GetCreatureRoleName(cr))
         + "\",\"sub_name\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             creatureTemplate->SubName)
         + "\",\"gender\":\""
         + gender
         + "\",\"disposition\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             GetNPCDisposition(cr, player))
         + "\",\"rank\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             GetCreatureRankLabel(creatureTemplate))
         + "\",\"creature_type\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             GetCreatureTypeLabel(creatureTemplate))
         + "\",\"qualification\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             GetProximityNPCQualificationLabel(
                 GetProximityNPCQualification(cr)))
         + "\"}";
@@ -1362,7 +1362,7 @@ std::string BuildNearbyNamesJson(
             break;
         if (count > 0)
             json += ",";
-        json += "\"" + JsonEscape(c.name) + "\"";
+        json += "\"" + LLMChatterJsonEscape(c.name) + "\"";
         ++count;
     }
     json += "]";
@@ -1385,7 +1385,7 @@ std::string BuildBaseEventJson(
         + std::to_string(
             player->GetGUID().GetCounter())
         + ",\"player_name\":\""
-        + JsonEscape(player->GetName())
+        + LLMChatterJsonEscape(player->GetName())
         + "\",\"zone_id\":"
         + std::to_string(player->GetZoneId())
         + ",\"map_id\":"
@@ -1393,7 +1393,7 @@ std::string BuildBaseEventJson(
         + ",\"instance_id\":"
         + std::to_string(instanceId)
         + ",\"map_name\":\""
-        + JsonEscape(rawMapName ? rawMapName : "")
+        + LLMChatterJsonEscape(rawMapName ? rawMapName : "")
         + "\",\"is_dungeon\":"
         + std::string(
             map && map->IsDungeon()
@@ -1403,11 +1403,11 @@ std::string BuildBaseEventJson(
             map && map->IsRaid()
                 ? "true" : "false")
         + ",\"zone_name\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             GetAreaNameForLocale(
                 player->GetZoneId()))
         + "\",\"subzone_name\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             GetAreaNameForLocale(
                 player->GetAreaId()))
         + "\",\"player_addressed\":"
@@ -1498,13 +1498,13 @@ void QueuePlayerSayProximityEvent(
     // addressed_name before closing brace.
     std::string extra =
         ",\"player_message\":\""
-        + JsonEscape(playerMessage) + "\"";
+        + LLMChatterJsonEscape(playerMessage) + "\"";
     if (!addressedName.empty())
         extra += ",\"addressed_name\":\""
-            + JsonEscape(addressedName) + "\"";
+            + LLMChatterJsonEscape(addressedName) + "\"";
     if (!interactionMode.empty())
         extra += ",\"interaction_mode\":\""
-            + JsonEscape(interactionMode) + "\"";
+            + LLMChatterJsonEscape(interactionMode) + "\"";
     if (!json.empty() && json.back() == '}')
         json.insert(json.size() - 1, extra);
 
@@ -1559,19 +1559,19 @@ void QueuePlayerEmoteProximityEvent(
     std::string extra =
         ",\"interaction\":\"emote\""
         ",\"player_emote\":\""
-        + JsonEscape(emoteName)
+        + LLMChatterJsonEscape(emoteName)
         + "\",\"player_emote_id\":"
         + std::to_string(textEmote)
         + ",\"mirror_emote\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             mirrorEmote
                 ? GetTextEmoteName(mirrorEmote)
                 : "")
         + "\""
         + ",\"addressed_name\":\""
-        + JsonEscape(addressed.name)
+        + LLMChatterJsonEscape(addressed.name)
         + "\",\"interaction_mode\":\""
-        + JsonEscape(interactionMode) + "\"";
+        + LLMChatterJsonEscape(interactionMode) + "\"";
     if (!json.empty() && json.back() == '}')
         json.insert(json.size() - 1, extra);
 
@@ -2102,9 +2102,9 @@ void HandleProximityPlayerSay(
         + std::to_string(
             player->GetGUID().GetCounter())
         + ",\"player_name\":\""
-        + JsonEscape(player->GetName())
+        + LLMChatterJsonEscape(player->GetName())
         + "\",\"player_message\":\""
-        + JsonEscape(safeMsg)
+        + LLMChatterJsonEscape(safeMsg)
         + "\",\"zone_id\":"
         + std::to_string(player->GetZoneId())
         + ",\"map_id\":"
@@ -2113,7 +2113,7 @@ void HandleProximityPlayerSay(
         + std::to_string(
             map ? map->GetInstanceId() : 0)
         + ",\"map_name\":\""
-        + JsonEscape(rawMapName ? rawMapName : "")
+        + LLMChatterJsonEscape(rawMapName ? rawMapName : "")
         + "\",\"is_dungeon\":"
         + std::string(
             map && map->IsDungeon()
@@ -2123,19 +2123,19 @@ void HandleProximityPlayerSay(
             map && map->IsRaid()
                 ? "true" : "false")
         + ",\"zone_name\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             GetAreaNameForLocale(
                 player->GetZoneId()))
         + "\",\"subzone_name\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             GetAreaNameForLocale(
                 player->GetAreaId()))
         + "\",\"turn_count\":"
         + std::to_string(scene->replyCount)
         + ",\"last_message\":\""
-        + JsonEscape(scene->lastMessage)
+        + LLMChatterJsonEscape(scene->lastMessage)
         + "\",\"responder_name\":\""
-        + JsonEscape(scene->lastSpeakerName)
+        + LLMChatterJsonEscape(scene->lastSpeakerName)
         + "\",\"responder_is_npc\":"
         + std::string(
             scene->lastSpeakerIsNPC
@@ -2156,31 +2156,31 @@ void HandleProximityPlayerSay(
             responderCreature
                 ? responderCreature->GetEntry() : 0)
         + ",\"responder_role\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             responderCreature
                 ? GetCreatureRoleName(
                     responderCreature) : "")
         + "\",\"responder_sub_name\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             responderTemplate
                 ? responderTemplate->SubName : "")
         + "\",\"responder_disposition\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             responderCreature
                 ? GetNPCDisposition(
                     responderCreature, player) : "")
         + "\",\"responder_rank\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             responderTemplate
                 ? GetCreatureRankLabel(
                     responderTemplate) : "")
         + "\",\"responder_creature_type\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             responderTemplate
                 ? GetCreatureTypeLabel(
                     responderTemplate) : "")
         + "\",\"responder_qualification\":\""
-        + JsonEscape(
+        + LLMChatterJsonEscape(
             responderCreature
                 ? GetProximityNPCQualificationLabel(
                     GetProximityNPCQualification(

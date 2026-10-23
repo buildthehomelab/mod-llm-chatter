@@ -369,7 +369,7 @@ std::string BuildGuildCandidatesJson(
             R"({{"guid":{},"name":"{}",)"
             R"("zone_id":{},"map_id":{}}})",
             bot->GetGUID().GetCounter(),
-            JsonEscape(bot->GetName()),
+            LLMChatterJsonEscape(bot->GetName()),
             bot->GetZoneId(),
             bot->GetMapId());
     }
@@ -493,13 +493,13 @@ void HandleGuildPlayerMessage(
         R"("team":"{}",)"
         R"("candidates":{}}})",
         guildId,
-        JsonEscape(guildName),
+        LLMChatterJsonEscape(guildName),
         sessionId,
         turnId,
         player->GetGUID().GetCounter(),
-        JsonEscape(player->GetName()),
+        LLMChatterJsonEscape(player->GetName()),
         player->getGender(),
-        JsonEscape(message),
+        LLMChatterJsonEscape(message),
         teamName,
         candidates);
 
@@ -649,10 +649,10 @@ bool QueueGuildLoginGreeting(
         R"("initial_delay_band":"{}",)"
         R"("candidates":{}}})",
         pending.guildId,
-        JsonEscape(guildName),
+        LLMChatterJsonEscape(guildName),
         pending.sessionId,
         player->GetGUID().GetCounter(),
-        JsonEscape(player->GetName()),
+        LLMChatterJsonEscape(player->GetName()),
         teamName,
         pending.initialDelaySeconds,
         pending.initialDelayBand,

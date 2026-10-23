@@ -266,40 +266,40 @@ std::string BuildBossEventJson(
     json << "{\"player_guid\":"
          << player->GetGUID().GetCounter()
          << ",\"player_name\":\""
-         << JsonEscape(player->GetName())
+         << LLMChatterJsonEscape(player->GetName())
          << "\",\"zone_id\":" << player->GetZoneId()
          << ",\"zone_name\":\""
-         << JsonEscape(GetZoneName(player->GetZoneId()))
+         << LLMChatterJsonEscape(GetZoneName(player->GetZoneId()))
          << "\",\"subzone_name\":\""
-         << JsonEscape(GetZoneName(player->GetAreaId()))
+         << LLMChatterJsonEscape(GetZoneName(player->GetAreaId()))
          << "\",\"map_id\":" << player->GetMapId()
          << ",\"instance_id\":"
          << (map ? map->GetInstanceId() : 0)
          << ",\"map_name\":\""
-         << JsonEscape(rawMapName ? rawMapName : "")
+         << LLMChatterJsonEscape(rawMapName ? rawMapName : "")
          << "\",\"is_dungeon\":"
          << (map && map->IsDungeon() ? "true" : "false")
          << ",\"is_raid\":"
          << (map && map->IsRaid() ? "true" : "false")
          << ",\"encounter_state\":\"pre_aggro\""
-         << ",\"trigger\":\"" << JsonEscape(trigger)
+         << ",\"trigger\":\"" << LLMChatterJsonEscape(trigger)
          << "\",\"player_message\":\""
-         << JsonEscape(playerMessage)
+         << LLMChatterJsonEscape(playerMessage)
          << "\",\"distance\":" << distance
          << ",\"safe_distance\":" << safeDistance
          << ",\"boss\":{\"name\":\""
-         << JsonEscape(boss->GetName())
+         << LLMChatterJsonEscape(boss->GetName())
          << "\",\"entry\":" << boss->GetEntry()
          << ",\"spawn_id\":" << boss->GetSpawnId()
          << ",\"role\":\""
-         << JsonEscape(GetCreatureRoleName(boss))
+         << LLMChatterJsonEscape(GetCreatureRoleName(boss))
          << "\",\"sub_name\":\""
-         << JsonEscape(
+         << LLMChatterJsonEscape(
                 creatureTemplate
                     ? creatureTemplate->SubName : "")
          << "\",\"disposition\":\"hostile\""
          << ",\"rank\":\""
-         << JsonEscape(GetBossRank(boss))
+         << LLMChatterJsonEscape(GetBossRank(boss))
          << "\"}}";
     std::ostringstream safetyMetadata;
     safetyMetadata

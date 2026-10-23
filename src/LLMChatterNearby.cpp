@@ -561,9 +561,9 @@ void CheckNearbyGameObjects()
                 R"("spell_focus_id":{},)"
                 R"("level":{},)"
                 R"("is_creature":{}}})",
-                JsonEscape(c.name),
-                JsonEscape(c.typeName),
-                JsonEscape(c.subName),
+                LLMChatterJsonEscape(c.name),
+                LLMChatterJsonEscape(c.typeName),
+                LLMChatterJsonEscape(c.subName),
                 c.distance,
                 c.entry,
                 c.spellFocusId,
@@ -603,9 +603,9 @@ void CheckNearbyGameObjects()
             + std::to_string(
                 group->GetGUID().GetCounter())
             + ",\"zone_name\":\""
-            + JsonEscape(zoneName)
+            + LLMChatterJsonEscape(zoneName)
             + "\",\"subzone_name\":\""
-            + JsonEscape(subzoneName)
+            + LLMChatterJsonEscape(subzoneName)
             + "\",\"in_city\":"
             + std::string(
                 inCity ? "true" : "false")

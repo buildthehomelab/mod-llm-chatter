@@ -638,12 +638,12 @@ private:
                         "\"transport_entry\":"
                         + std::to_string(entry) + ","
                         "\"transport_name\":\""
-                        + JsonEscape(info.fullName) + "\","
+                        + LLMChatterJsonEscape(info.fullName) + "\","
                         "\"destination\":\""
-                        + JsonEscape(info.destination)
+                        + LLMChatterJsonEscape(info.destination)
                         + "\","
                         "\"transport_type\":\""
-                        + JsonEscape(info.transportType)
+                        + LLMChatterJsonEscape(info.transportType)
                         + "\","
                         "\"verified_bots\":"
                         + verifiedJson + "}";
@@ -821,7 +821,7 @@ private:
                     R"({{"guid":{},"name":"{}",)"
                     R"("zone_id":{},"map_id":{}}})",
                     participant->GetGUID().GetCounter(),
-                    JsonEscape(participant->GetName()),
+                    LLMChatterJsonEscape(participant->GetName()),
                     participant->GetZoneId(),
                     participant->GetMapId());
             }
@@ -837,13 +837,13 @@ private:
                 R"("team":"{}",)"
                 R"("zone_id":{}}})",
                 guildId,
-                JsonEscape(guildName),
-                JsonEscape(speaker->GetName()),
+                LLMChatterJsonEscape(guildName),
+                LLMChatterJsonEscape(speaker->GetName()),
                 isConversation
                     ? "conversation"
                     : "statement",
                 participantsJson,
-                JsonEscape(mates),
+                LLMChatterJsonEscape(mates),
                 teamName,
                 speaker->GetZoneId());
 
@@ -976,8 +976,8 @@ private:
                 R"("zone_id":{},)"
                 R"("difficulty":"{}"}})",
                 groupId,
-                JsonEscape(player->GetName()),
-                JsonEscape(map->GetMapName()),
+                LLMChatterJsonEscape(player->GetName()),
+                LLMChatterJsonEscape(map->GetMapName()),
                 player->GetZoneId(),
                 diffStr);
 

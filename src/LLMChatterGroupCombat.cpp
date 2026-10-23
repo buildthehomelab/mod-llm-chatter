@@ -125,13 +125,13 @@ void QueueStateCallout(
         "\"bot_guid\":" +
             std::to_string(botGuid) + ","
         "\"bot_name\":\"" +
-            JsonEscape(botName) + "\","
+            LLMChatterJsonEscape(botName) + "\","
         "\"group_id\":" +
             std::to_string(groupId) + ","
         "\"target_name\":\"" +
-            JsonEscape(targetName) + "\","
+            LLMChatterJsonEscape(targetName) + "\","
         "\"aggro_target\":\"" +
-            JsonEscape(aggroTarget) + "\","
+            LLMChatterJsonEscape(aggroTarget) + "\","
         + BuildBotStateJson(bot) + "}";
 
     if (bot->InBattleground())
@@ -237,7 +237,7 @@ void HandleGroupCreatureKillImpl(
     std::string extraData = "{"
         + BuildBotIdentityFields(reactor) + ","
         "\"creature_name\":\"" +
-            JsonEscape(creatureName) + "\","
+            LLMChatterJsonEscape(creatureName) + "\","
         "\"creature_entry\":" +
             std::to_string(creatureEntry) + ","
         "\"is_boss\":" +
@@ -368,7 +368,7 @@ void HandleGroupPlayerKilledByCreatureImpl(
                     std::to_string(
                         groupId) + ","
                 "\"killer_name\":\"" +
-                    JsonEscape(
+                    LLMChatterJsonEscape(
                         kName) + "\","
                 "\"killer_entry\":" +
                     std::to_string(
@@ -440,11 +440,11 @@ void HandleGroupPlayerKilledByCreatureImpl(
     std::string extraData = "{"
         + BuildBotIdentityFields(reactor) + ","
         "\"dead_name\":\"" +
-            JsonEscape(deadName) + "\","
+            LLMChatterJsonEscape(deadName) + "\","
         "\"dead_guid\":" +
             std::to_string(deadGuid) + ","
         "\"killer_name\":\"" +
-            JsonEscape(killerName) + "\","
+            LLMChatterJsonEscape(killerName) + "\","
         "\"killer_entry\":" +
             std::to_string(killerEntry) + ","
         "\"group_id\":" +
@@ -598,9 +598,9 @@ void HandleGroupLootEventImpl(
         + BuildBotIdentityFields(reactor) + ","
         "\"is_bot\":1,"
         "\"looter_name\":\"" +
-            JsonEscape(looterName) + "\","
+            LLMChatterJsonEscape(looterName) + "\","
         "\"item_name\":\"" +
-            JsonEscape(itemName) + "\","
+            LLMChatterJsonEscape(itemName) + "\","
         "\"item_entry\":" +
             std::to_string(itemEntry) + ","
         "\"item_quality\":" +
@@ -738,7 +738,7 @@ void HandleGroupPlayerEnterCombatImpl(
     std::string extraData = "{"
         + BuildBotIdentityFields(player) + ","
         "\"creature_name\":\"" +
-            JsonEscape(creatureName) + "\","
+            LLMChatterJsonEscape(creatureName) + "\","
         "\"creature_entry\":" +
             std::to_string(
                 creature->GetEntry()) + ","
@@ -945,11 +945,11 @@ void HandleGroupPlayerBeforeSendChatMessageImpl(
 
     std::string extraData = "{"
         "\"player_name\":\"" +
-            JsonEscape(playerName) + "\","
+            LLMChatterJsonEscape(playerName) + "\","
         "\"player_gender\":" +
             std::to_string(player->getGender()) + ","
         "\"player_message\":\"" +
-            JsonEscape(safeMsg) + "\","
+            LLMChatterJsonEscape(safeMsg) + "\","
         "\"group_id\":" +
             std::to_string(groupId) +
         "}";
@@ -1039,7 +1039,7 @@ void HandleGroupPlayerLevelChangedImpl(
         "\"bot_guid\":" +
             std::to_string(botGuid) + ","
         "\"bot_name\":\"" +
-            JsonEscape(botName) + "\","
+            LLMChatterJsonEscape(botName) + "\","
         "\"bot_class\":" +
             std::to_string(
                 reactor->getClass()) + ","
@@ -1057,7 +1057,7 @@ void HandleGroupPlayerLevelChangedImpl(
             std::string(
                 isBot ? "1" : "0") + ","
         "\"leveler_name\":\"" +
-            JsonEscape(playerName) + "\","
+            LLMChatterJsonEscape(playerName) + "\","
         "\"group_id\":" +
             std::to_string(groupId) +
         "}";
@@ -1165,17 +1165,17 @@ bool HandleGroupPlayerBeforeQuestCompleteImpl(
     std::string extraData = "{"
         + BuildBotIdentityFields(reactor) + ","
         "\"quest_name\":\"" +
-            JsonEscape(questName) + "\","
+            LLMChatterJsonEscape(questName) + "\","
         "\"quest_id\":" +
             std::to_string(questId) + ","
         "\"completer_name\":\"" +
-            JsonEscape(playerName) + "\","
+            LLMChatterJsonEscape(playerName) + "\","
         "\"quest_details\":\"" +
-            JsonEscape(
+            LLMChatterJsonEscape(
                 NormalizeChatTextForDb(
                     quest->GetDetails(), 200)) + "\","
         "\"quest_objectives\":\"" +
-            JsonEscape(
+            LLMChatterJsonEscape(
                 NormalizeChatTextForDb(
                     quest->GetObjectives(), 150)) + "\","
         "\"group_id\":" +
@@ -1284,17 +1284,17 @@ void HandleGroupPlayerCompleteQuestImpl(
     std::string extraData = "{"
         + BuildBotIdentityFields(reactor) + ","
         "\"completer_name\":\"" +
-            JsonEscape(playerName) + "\","
+            LLMChatterJsonEscape(playerName) + "\","
         "\"quest_name\":\"" +
-            JsonEscape(questName) + "\","
+            LLMChatterJsonEscape(questName) + "\","
         "\"quest_id\":" +
             std::to_string(questId) + ","
         "\"quest_details\":\"" +
-            JsonEscape(
+            LLMChatterJsonEscape(
                 NormalizeChatTextForDb(
                     quest->GetDetails(), 200)) + "\","
         "\"quest_objectives\":\"" +
-            JsonEscape(
+            LLMChatterJsonEscape(
                 NormalizeChatTextForDb(
                     quest->GetObjectives(), 150)) + "\","
         "\"group_id\":" +
@@ -1389,9 +1389,9 @@ void HandleGroupPlayerAchievementCompleteImpl(
             std::string(
                 isBot ? "1" : "0") + ","
         "\"achiever_name\":\"" +
-            JsonEscape(playerName) + "\","
+            LLMChatterJsonEscape(playerName) + "\","
         "\"achievement_name\":\"" +
-            JsonEscape(achName) + "\","
+            LLMChatterJsonEscape(achName) + "\","
         "\"achievement_id\":" +
             std::to_string(achId) + ","
         "\"group_id\":" +
@@ -1796,13 +1796,13 @@ void HandleGroupPlayerSpellCastImpl(
     std::string extraData = "{"
         + BuildBotIdentityFields(reactor) + ","
         "\"caster_name\":\"" +
-            JsonEscape(casterName) + "\","
+            LLMChatterJsonEscape(casterName) + "\","
         "\"spell_name\":\"" +
-            JsonEscape(spellName) + "\","
+            LLMChatterJsonEscape(spellName) + "\","
         "\"spell_category\":\"" +
             spellCategory + "\","
         "\"target_name\":\"" +
-            JsonEscape(targetName) + "\","
+            LLMChatterJsonEscape(targetName) + "\","
         "\"group_id\":" +
             std::to_string(groupId) + ","
         + BuildBotStateJson(reactor) + "}";
@@ -1992,9 +1992,9 @@ void HandleGroupPlayerReleasedGhostImpl(
         "\"zone_id\":" +
             std::to_string(zoneId) + ","
         "\"zone_name\":\"" +
-            JsonEscape(zoneName) + "\","
+            LLMChatterJsonEscape(zoneName) + "\","
         "\"dead_name\":\"" +
-            JsonEscape(deadName) + "\","
+            LLMChatterJsonEscape(deadName) + "\","
         "\"is_player_death\":" +
             std::string(
                 isPlayerDeath
@@ -2084,7 +2084,7 @@ void HandleGroupPlayerMapChangedImpl(
             "\"map_id\":" +
                 std::to_string(mapId) + ","
             "\"map_name\":\"" +
-                JsonEscape(mapName) + "\","
+                LLMChatterJsonEscape(mapName) + "\","
             "\"is_raid\":" +
                 std::string(
                     isRaid
@@ -2497,11 +2497,11 @@ void HandleGroupPlayerUpdateZoneImpl(
         "\"zone_id\":" +
             std::to_string(newZone) + ","
         "\"zone_name\":\"" +
-            JsonEscape(zoneName) + "\","
+            LLMChatterJsonEscape(zoneName) + "\","
         "\"area_id\":" +
             std::to_string(newArea) + ","
         "\"area_name\":\"" +
-            JsonEscape(areaName) + "\""
+            LLMChatterJsonEscape(areaName) + "\""
         "}";
 
     extraData = EscapeString(extraData);

@@ -87,7 +87,7 @@ void FlushQuestAcceptBatches()
                     std::to_string(
                         b.reactorGuid) + ","
                 "\"bot_name\":\"" +
-                    JsonEscape(b.reactorName)
+                    LLMChatterJsonEscape(b.reactorName)
                     + "\","
                 "\"bot_class\":" +
                     std::to_string(
@@ -104,10 +104,10 @@ void FlushQuestAcceptBatches()
                 "\"is_bot\":1,"
                 "\"acceptor_is_bot\":0,"
                 "\"acceptor_name\":\"" +
-                    JsonEscape(b.acceptorName)
+                    LLMChatterJsonEscape(b.acceptorName)
                     + "\","
                 "\"quest_name\":\"" +
-                    JsonEscape(q.questName)
+                    LLMChatterJsonEscape(q.questName)
                     + "\","
                 "\"quest_id\":" +
                     std::to_string(q.questId)
@@ -116,14 +116,14 @@ void FlushQuestAcceptBatches()
                     std::to_string(q.questLevel)
                     + ","
                 "\"zone_name\":\"" +
-                    JsonEscape(b.zoneName)
+                    LLMChatterJsonEscape(b.zoneName)
                     + "\","
                 "\"quest_details\":\"" +
-                    JsonEscape(
+                    LLMChatterJsonEscape(
                         b.firstQuestDetails)
                     + "\","
                 "\"quest_objectives\":\"" +
-                    JsonEscape(
+                    LLMChatterJsonEscape(
                         b.firstQuestObjectives)
                     + "\","
                 "\"group_id\":" +
@@ -168,7 +168,7 @@ void FlushQuestAcceptBatches()
                 if (i > 0) questNamesArr += ",";
                 questNamesArr +=
                     "\"" +
-                    JsonEscape(
+                    LLMChatterJsonEscape(
                         b.quests[i].questName) +
                     "\"";
             }
@@ -184,7 +184,7 @@ void FlushQuestAcceptBatches()
                     std::to_string(
                         b.reactorGuid) + ","
                 "\"bot_name\":\"" +
-                    JsonEscape(b.reactorName)
+                    LLMChatterJsonEscape(b.reactorName)
                     + "\","
                 "\"bot_class\":" +
                     std::to_string(
@@ -201,7 +201,7 @@ void FlushQuestAcceptBatches()
                 "\"is_bot\":1,"
                 "\"acceptor_is_bot\":0,"
                 "\"acceptor_name\":\"" +
-                    JsonEscape(b.acceptorName)
+                    LLMChatterJsonEscape(b.acceptorName)
                     + "\","
                 "\"quest_names\":" +
                     questNamesArr + ","
@@ -209,7 +209,7 @@ void FlushQuestAcceptBatches()
                     std::to_string(
                         b.quests.size()) + ","
                 "\"zone_name\":\"" +
-                    JsonEscape(b.zoneName)
+                    LLMChatterJsonEscape(b.zoneName)
                     + "\","
                 "\"group_id\":" +
                     std::to_string(b.groupId) +
@@ -342,7 +342,7 @@ public:
                 "\"bot_guid\":" +
                     std::to_string(botGuid) + ","
                 "\"bot_name\":\"" +
-                    JsonEscape(botName) + "\","
+                    LLMChatterJsonEscape(botName) + "\","
                 "\"bot_class\":" +
                     std::to_string(
                         reactor->getClass()) + ","
@@ -361,9 +361,9 @@ public:
                         IsPlayerBot(player)
                             ? "1" : "0") + ","
                 "\"acceptor_name\":\"" +
-                    JsonEscape(playerName) + "\","
+                    LLMChatterJsonEscape(playerName) + "\","
                 "\"quest_name\":\"" +
-                    JsonEscape(questName) + "\","
+                    LLMChatterJsonEscape(questName) + "\","
                 "\"quest_id\":" +
                     std::to_string(questId) + ","
                 "\"quest_level\":" +
@@ -371,14 +371,14 @@ public:
                         quest->GetQuestLevel())
                     + ","
                 "\"zone_name\":\"" +
-                    JsonEscape(zoneName) + "\","
+                    LLMChatterJsonEscape(zoneName) + "\","
                 "\"quest_details\":\"" +
-                    JsonEscape(
+                    LLMChatterJsonEscape(
                         NormalizeChatTextForDb(
                             quest->GetDetails(), 200))
                     + "\","
                 "\"quest_objectives\":\"" +
-                    JsonEscape(
+                    LLMChatterJsonEscape(
                         NormalizeChatTextForDb(
                             quest->GetObjectives(), 150))
                     + "\","
