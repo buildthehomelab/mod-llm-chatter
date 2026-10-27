@@ -1340,6 +1340,14 @@ void HandleGroupPlayerAchievementCompleteImpl(
         return;
     }
 
+    // Handed out while the character loads (an account's shared
+    // achievements): earned somewhere else, nothing to cheer.
+    if (player->GetSession()
+        && player->GetSession()->PlayerLoading())
+    {
+        return;
+    }
+
     Group* group = player->GetGroup();
     if (!group)
     {
