@@ -693,7 +693,7 @@ void CheckBossProximityDialogue()
             continue;
 
         Player* player = session->GetPlayer();
-        if (!player || IsPlayerBot(player)
+        if (!IsRealChatterPlayer(player)
             || !IsBossAnchorEligible(player))
             continue;
         players.push_back(player);

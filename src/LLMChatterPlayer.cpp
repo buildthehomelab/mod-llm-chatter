@@ -427,7 +427,7 @@ static void HandleBotEntersEnemyTerritory(
         {
             if (!p || !p->IsInWorld())
                 continue;
-            if (IsPlayerBot(p))
+            if (!IsRealChatterPlayer(p))
                 continue;
             if (p->GetZoneId() != newZone)
                 continue;
