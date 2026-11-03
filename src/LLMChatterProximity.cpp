@@ -2015,7 +2015,7 @@ void CheckProximityChatter(bool instanceMaps)
 
         Player* player = session->GetPlayer();
         if (!player || !player->IsInWorld()
-            || IsPlayerBot(player))
+            || !IsRealChatterPlayer(player))
             continue;
         Map* map = player->GetMap();
         bool playerInInstance =

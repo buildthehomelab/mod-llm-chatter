@@ -24,6 +24,13 @@
 #include "World.h"
 #include "WorldSession.h"
 
+// A core with home screens has a character per account that nobody plays. Other cores have none.
+#if __has_include("HomeViewer.h")
+#include "HomeViewer.h"
+#else
+inline bool IsHomeViewer(Player const*) { return false; }
+#endif
+
 #include <utf8.h>
 
 #include <algorithm>
@@ -1175,6 +1182,12 @@ bool IsPlayerBot(Player* player)
     // master == bot, so IsSelfBot() keeps it in
     // the real-player side of chatter ownership.
     return !IsSelfBot(player);
+}
+
+bool IsRealChatterPlayer(Player* player)
+{
+    return player && !IsPlayerBot(player)
+        && !IsHomeViewer(player);
 }
 
 Creature* FindCreatureBySpawnId(

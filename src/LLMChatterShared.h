@@ -25,6 +25,9 @@ enum class LLMChatterPriorityBand : uint8
 };
 
 bool IsPlayerBot(Player* player);
+// Someone chatter should happen around: not a bot, and
+// not a home screen viewer waiting on a character list.
+bool IsRealChatterPlayer(Player* player);
 // Whether the player has joined a channel with the same
 // channel ID (the old playerbots Player::IsInChannel).
 bool IsPlayerInChannel(Player* player, Channel const* channel);

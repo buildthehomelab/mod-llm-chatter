@@ -248,7 +248,7 @@ std::vector<uint32> GetZonesWithRealPlayers()
         if (!player || !player->IsInWorld())
             continue;
 
-        if (!IsPlayerBot(player)
+        if (IsRealChatterPlayer(player)
             && IsInOverworld(player))
         {
             uint32 zoneId = player->GetZoneId();
@@ -389,7 +389,7 @@ static std::string GetCachedWeatherName(
         if (!player || !player->IsInWorld())
             continue;
 
-        if (IsPlayerBot(player)
+        if (!IsRealChatterPlayer(player)
             || player->GetZoneId() != zoneId
             || !IsInOverworld(player))
         {
@@ -513,7 +513,7 @@ void HandleWeatherChange(
         if (!player || !player->IsInWorld())
             continue;
 
-        if (!IsPlayerBot(player)
+        if (IsRealChatterPlayer(player)
             && player->GetZoneId() == zoneId
             && IsInOverworld(player))
         {
@@ -725,7 +725,7 @@ void CheckAmbientWeather()
             if (!player || !player->IsInWorld())
                 continue;
 
-            if (!IsPlayerBot(player)
+            if (IsRealChatterPlayer(player)
                 && player->GetZoneId() == zoneId
                 && IsInOverworld(player))
             {
@@ -867,7 +867,7 @@ static uint32 GetDominantFactionInZone(uint32 zoneId)
         if (!player || !player->IsInWorld())
             continue;
 
-        if (!IsPlayerBot(player)
+        if (IsRealChatterPlayer(player)
             && player->GetZoneId() == zoneId)
         {
             if (GetFaction(player) == TEAM_ALLIANCE)
